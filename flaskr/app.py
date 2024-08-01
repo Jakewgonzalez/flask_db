@@ -1,8 +1,9 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 import json
 import os
 
 app = Flask(__name__)
+app.secret_key = 'SECRET'
 
 def get_users():
     users = {}
@@ -24,13 +25,23 @@ def account():
         password = request.form['password']
 
         if users.get(username) == password:
+            session['username'] == username
             return redirect(url_for('welcome'))
         return 'Error'
     return render_template('account.html')
 
 @app.route("/welcome")
 def welcome():
+    if 'username' in session:
+        return f'logged in as {session["username"]}', render_template('welcome.html')
     return render_template('welcome.html')
+
+@app.route("/enviroment")
+def env_info():
+    if username in session:
+        username = session['username']
+        return render_template('enviroment.html')
+    return 'You are not logged in'
 
 @app.route("/cloud")
 def cloud_services():
