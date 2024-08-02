@@ -58,6 +58,22 @@ def env_info():
         return render_template('enviroment.html', username = session['username'], data=data)
     return 'You are not logged in'
 
+@app.route("/update", methods=["GET", "POST"])
+def env_update():
+    if request.method == "POST":
+
+        id = request.form['id']
+        name = request.form['name']
+        temp = request.form['temp']
+        humidity = request.form['humidity']
+
+        conn = db_conn()
+        conn.execute('INSERT INTO users (id, name, temp, humidity) VALUES (?, ?, ?, ?)', (id, name, temp, humidity))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('env_info'))
+    return render_template('update.html')
+
 @app.route("/logout")
 def logout():
     session.pop('username', None)

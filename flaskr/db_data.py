@@ -12,13 +12,5 @@ cur.execute('''
     )
 ''')
 
-cur.executemany('''
-    INSERT INTO users (name, temp, humidity)
-    VALUES (?, ?, ?)
-''', [
-    ('Sensor 1', 30, 14),
-    ('Sensor 2', 25, 11)
-])
-
 conn.commit()
 conn.close()
