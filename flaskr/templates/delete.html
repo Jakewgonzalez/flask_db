@@ -8,21 +8,12 @@
 </head>
 <body>
     {% include 'menu.html' %}
-    <p>update</p>
+    <p>delete</p>
     <form method="post">
         <label for="name">id:</label>
         <input type="text" id="id" name="id" required>
         <br>
-        <label for="name">name:</label>
-        <input type="text" id="name" name="name" required>
-        <br>
-        <label for="name">temp:</label>
-        <input type="text" id="temp" name="temp" required>
-        <br>
-        <label for="name">humidity:</label>
-        <input type="text" id="humidity" name="humidity" required>
-        <br>
-        <input type="submit" value="Update"> 
+        <input type="submit" value="Delete"> 
     </form>
     <a href="{{ url_for('env_info') }}">Back to List</a>
 </body>

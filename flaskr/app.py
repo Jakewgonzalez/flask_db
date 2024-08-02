@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 import json
 import sqlite3
-import db_data
 import os
 
 app = Flask(__name__)
@@ -73,6 +72,19 @@ def env_update():
         conn.close()
         return redirect(url_for('env_info'))
     return render_template('update.html')
+
+@app.route("/delete", methods=["GET", "POST"])
+def env_delete():
+    if request.method == "POST":
+
+        id = request.form['id']
+
+        conn = db_conn()
+        conn.execute('DELETE FROM users WHERE id = ?', (id,))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('env_info'))
+    return render_template('delete.html')
 
 @app.route("/logout")
 def logout():
