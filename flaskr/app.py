@@ -59,32 +59,41 @@ def env_info():
 
 @app.route("/update", methods=["GET", "POST"])
 def env_update():
-    if request.method == "POST":
+    if 'username' in session:
+        if session['username'] =='admin':
+            if request.method == "POST":
+                id = request.form['id']
+                name = request.form['name']
+                temp = request.form['temp']
+                humidity = request.form['humidity']
 
-        id = request.form['id']
-        name = request.form['name']
-        temp = request.form['temp']
-        humidity = request.form['humidity']
-
-        conn = db_conn()
-        conn.execute('INSERT INTO users (id, name, temp, humidity) VALUES (?, ?, ?, ?)', (id, name, temp, humidity))
-        conn.commit()
-        conn.close()
-        return redirect(url_for('env_info'))
-    return render_template('update.html')
+                conn = db_conn()
+                conn.execute('INSERT INTO users (id, name, temp, humidity) VALUES (?, ?, ?, ?)', (id, name, temp, humidity))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('env_info'))
+            return render_template('update.html')
+        else:
+            return 'Only Admin can access this page'
+    return 'You are not logged in'
 
 @app.route("/delete", methods=["GET", "POST"])
 def env_delete():
-    if request.method == "POST":
+    if 'username' in session:
+        if session['username'] =='admin':
+            if request.method == "POST":
 
-        id = request.form['id']
+                id = request.form['id']
 
-        conn = db_conn()
-        conn.execute('DELETE FROM users WHERE id = ?', (id,))
-        conn.commit()
-        conn.close()
-        return redirect(url_for('env_info'))
-    return render_template('delete.html')
+                conn = db_conn()
+                conn.execute('DELETE FROM users WHERE id = ?', (id,))
+                conn.commit()
+                conn.close()
+                return redirect(url_for('env_info'))
+            return render_template('delete.html')
+        else:
+            return 'Only Admin can access this page'
+    return 'You are not logged in'
 
 @app.route("/logout")
 def logout():
