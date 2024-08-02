@@ -8,6 +8,29 @@
 </head>
 <body>
     {% include 'menu.html' %}
-    <p>ENV Data</p>
+    <div class="container">
+        <h2>Enviromental Sensor Data</h2>
+        <p>text</p>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>NAME</th>
+                    <th>TEMPERATURE</th>
+                    <th>HUMIDITY</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row['id'] }}</td>
+                    <td>{{ row['name'] }}</td>
+                    <td>{{ row['temp'] }}</td>
+                    <td>{{ row['humidity'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

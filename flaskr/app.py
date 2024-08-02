@@ -1,9 +1,15 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 import json
+import sqlite3
 import os
 
 app = Flask(__name__)
 app.secret_key = 'SECRET'
+
+def db_conn():
+    conn = sqlite3.connect('data.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 def get_users():
     users = {}
@@ -15,7 +21,7 @@ def get_users():
 users = get_users()
 
 @app.route("/")
-def home():
+def main_app():
     return render_template('index.html')
 
 @app.route("/account", methods=['GET', 'POST'])
@@ -36,11 +42,49 @@ def welcome():
         return render_template('welcome.html')
     return redirect(url_for('account'))
 
+@app.route("/home")
+def home():
+    if 'username' in session:
+        return render_template('home.html', username = session['username'])
+    return 'You are not logged in'
+
 @app.route("/enviroment")
 def env_info():
     if 'username' in session:
-        return render_template('enviroment.html', username = session['username'])
+        conn = db_conn()
+        data = conn.execute('SELECT * FROM users').fetchall()
+        conn.close()
+        return render_template('enviroment.html', username = session['username'], data=data)
     return 'You are not logged in'
+
+@app.route("/update", methods=["GET", "POST"])
+def env_update():
+    if request.method == "POST":
+
+        id = request.form['id']
+        name = request.form['name']
+        temp = request.form['temp']
+        humidity = request.form['humidity']
+
+        conn = db_conn()
+        conn.execute('INSERT INTO users (id, name, temp, humidity) VALUES (?, ?, ?, ?)', (id, name, temp, humidity))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('env_info'))
+    return render_template('update.html')
+
+@app.route("/delete", methods=["GET", "POST"])
+def env_delete():
+    if request.method == "POST":
+
+        id = request.form['id']
+
+        conn = db_conn()
+        conn.execute('DELETE FROM users WHERE id = ?', (id,))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('env_info'))
+    return render_template('delete.html')
 
 @app.route("/logout")
 def logout():
