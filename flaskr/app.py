@@ -25,7 +25,7 @@ def account():
         password = request.form['password']
 
         if users.get(username) == password:
-            session['username'] == username
+            session['username'] = username
             return redirect(url_for('welcome'))
         return 'Error'
     return render_template('account.html')
@@ -33,15 +33,19 @@ def account():
 @app.route("/welcome")
 def welcome():
     if 'username' in session:
-        return f'logged in as {session["username"]}', render_template('welcome.html')
-    return render_template('welcome.html')
+        return render_template('welcome.html')
+    return redirect(url_for('account'))
 
 @app.route("/enviroment")
 def env_info():
-    if username in session:
-        username = session['username']
-        return render_template('enviroment.html')
+    if 'username' in session:
+        return render_template('enviroment.html', username = session['username'])
     return 'You are not logged in'
+
+@app.route("/logout")
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('account'))
 
 @app.route("/cloud")
 def cloud_services():
