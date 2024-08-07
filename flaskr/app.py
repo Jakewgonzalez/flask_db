@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, session
 import json
 import sqlite3
 import os
+from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'SECRET'
@@ -11,14 +12,14 @@ def db_conn():
     conn.row_factory = sqlite3.Row
     return conn
 
-def get_users():
-    users = {}
-    if os.path.exists('users.json'):
-        with open('users.json', 'r') as f:
-            users = json.load(f)
-    return users
+# def get_users():
+#     users = {}
+#     if os.path.exists('users.json'):
+#         with open('users.json', 'r') as f:
+#             users = json.load(f)
+#     return users
 
-users = get_users()
+#users = get_users()
 
 @app.route("/")
 def main_app():
@@ -30,7 +31,11 @@ def account():
         username = request.form['username']
         password = request.form['password']
 
-        if users.get(username) == password:
+        conn = db_conn()
+        user = conn.execute('SELECT * FROM profile WHERE username = ?', (username,)).fetchone()
+        conn.close()
+
+        if user and check_password_hash(user['password_hash'], password):
             session['username'] = username
             return redirect(url_for('welcome'))
         return 'Error'
