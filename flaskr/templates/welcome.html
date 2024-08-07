@@ -8,6 +8,10 @@
 </head>
 <body>
     {% include 'menu.html' %}
-    <p>Welcome</p>
+    {% if last_login %}
+        <p class="p-3 bg-light">Your last login was at: {{ last_login }}</p>
+    {% else %}
+        <p>No login timestamp available.</p>
+    {% endif %}
 </body>
 </html>
