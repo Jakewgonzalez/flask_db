@@ -9,7 +9,7 @@
 <body>
     {% include 'menu.html' %}
     {% if last_login %}
-        <p>Your last login was at: {{ last_login }}</p>
+        <p class="p-3 bg-light">Your last login was at: {{ last_login }}</p>
     {% else %}
         <p>No login timestamp available.</p>
     {% endif %}

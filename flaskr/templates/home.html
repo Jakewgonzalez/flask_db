@@ -9,9 +9,18 @@
 <body>
     {% include 'menu.html' %}
     {% if last_login %}
-        <p>Your last login was at: {{ last_login }}</p>
+        <p class="p-3 bg-light">Your last login was at: {{ last_login }}</p>
     {% else %}
         <p>No login timestamp available.</p>
     {% endif %}
+    <div class="container">
+        <h1 class="text-center">About ICS</h1>
+        <p class="text-center">
+            Welcome to ICS! Within this portal you have access to view the enviromental results of all recorded sensors.
+        </p>
+        <p class="text-center text-danger">
+            Note: Only administrators have access to edit data within the tables. Please contact an administrator for change requests.
+        </p>
+    </div>
 </body>
 </html>

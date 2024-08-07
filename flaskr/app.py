@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 import json
 import sqlite3
 import os
@@ -125,3 +125,23 @@ def ics_data():
 @app.route("/about")
 def about():
     return render_template('about.html')
+
+@app.route("/chart")
+def chart():
+    chart_data = {
+        'labels': ['AWS', 'Google', 'Oracle'],
+        'datasets': [{
+            'label': 'Up Time',
+            'data': [98, 97, 95],
+            'backgroundColor': ['rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)'
+            ],
+            'borderColor': ['rgba(75, 192, 192, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+            ],
+            'borderWidth': 1
+        }]
+    }
+    return jsonify(chart_data)
