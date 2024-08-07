@@ -1,6 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify # type: ignore
 import sqlite3
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash # type: ignore
 from datetime import datetime, timezone
 
 app = Flask(__name__)
