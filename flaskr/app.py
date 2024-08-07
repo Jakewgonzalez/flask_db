@@ -3,6 +3,7 @@ import json
 import sqlite3
 import os
 from werkzeug.security import check_password_hash
+from datetime import datetime, timezone
 
 app = Flask(__name__)
 app.secret_key = 'SECRET'
@@ -11,15 +12,6 @@ def db_conn():
     conn = sqlite3.connect('data.db')
     conn.row_factory = sqlite3.Row
     return conn
-
-# def get_users():
-#     users = {}
-#     if os.path.exists('users.json'):
-#         with open('users.json', 'r') as f:
-#             users = json.load(f)
-#     return users
-
-#users = get_users()
 
 @app.route("/")
 def main_app():
@@ -33,24 +25,41 @@ def account():
 
         conn = db_conn()
         user = conn.execute('SELECT * FROM profile WHERE username = ?', (username,)).fetchone()
-        conn.close()
-
+        
         if user and check_password_hash(user['password_hash'], password):
+
+            conn.execute('UPDATE profile SET last_login = ? WHERE username = ?', (datetime.now(timezone.utc), username))
+            conn.commit()
+            conn.close()
+                    
             session['username'] = username
             return redirect(url_for('welcome'))
-        return 'Error'
+                
+        conn.close()
+        return 'Error: Invalid username or password'
+
     return render_template('account.html')
 
 @app.route("/welcome")
 def welcome():
     if 'username' in session:
-        return render_template('welcome.html')
+        conn = db_conn()
+        user = conn.execute('SELECT last_login FROM profile WHERE username = ?', (session['username'],)).fetchone()
+        conn.close()
+        
+        last_login = user['last_login'] if user else None
+        return render_template('welcome.html', username=session['username'], last_login=last_login)
     return redirect(url_for('account'))
 
 @app.route("/home")
 def home():
     if 'username' in session:
-        return render_template('home.html', username = session['username'])
+        conn = db_conn()
+        user = conn.execute('SELECT last_login FROM profile WHERE username = ?', (session['username'],)).fetchone()
+        conn.close()
+        
+        last_login = user['last_login'] if user else None
+        return render_template('home.html', username=session['username'], last_login=last_login)
     return 'You are not logged in'
 
 @app.route("/enviroment")
