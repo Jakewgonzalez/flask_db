@@ -1,10 +1,32 @@
-# flask_lab
-The web application allows a user to log in and authenticate using a unique username and password. 
-Upon successful login, the web application displays a welcome page, welcoming the user and displaying a simple navigation menu. 
-The navigation menu includes options for “Home,” “View Environmental Results,” and “Logout.”
-The Home menu option includes the last time the user accessed the application, along with a brief description of what the each of menu options provide. 
-The View Environmental Results menu option displays the temperature and relative humidity values for the Industrial control environmental sensors for the last 24 hours. 
-The Logout menu option logs the user out of the application and redisplays the login screen. 
-The web application allows two different roles for accessing the application: user and administrator. 
-The user role has read privileges supporting all web pages
-The administrator role has all the privileges of the user role, plus the ability to insert, update, and delete records in the related sensor files by using a web page form. 
+# Web Application Overview
+
+This web application provides a secure platform for users to log in and access environmental sensor data. The application supports different user roles with varying levels of access and functionality.
+
+## Features
+
+### 1. User Authentication
+- **Login**: Users can log in with a unique username and password.
+- **Welcome Page**: Upon successful login, users are greeted with a welcome page.
+
+### 2. Navigation Menu
+The application features a simple navigation menu with the following options:
+
+- **Home**: 
+  - Displays the last login time.
+  - Provides a brief description of each menu option.
+  
+- **View Environmental Results**: 
+  - Shows temperature and relative humidity values from industrial control environmental sensors for the last 24 hours.
+  
+- **Logout**: 
+  - Logs the user out and redirects back to the login screen.
+
+## User Roles
+
+### 1. User Role
+- **Read Privileges**: Users with this role can view all web pages and data.
+
+### 2. Administrator Role
+- **Full Privileges**: Administrators have all user privileges plus the ability to:
+  - **Insert**, **update**, and **delete** records in the sensor data files.
+  - Manage these records through a dedicated web form.
