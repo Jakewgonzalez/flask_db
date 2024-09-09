@@ -1,5 +1,6 @@
+'''used to init db'''
 import sqlite3
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash # type: ignore
 
 conn = sqlite3.connect('data.db')
 cur = conn.cursor()
