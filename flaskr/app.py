@@ -87,10 +87,16 @@ def env_update():
     if 'username' in session:
         if session['username'] =='admin':
             if request.method == "POST":
-                f_id = request.form['id']
+                try:
+                    f_id = int(request.form['id'])
+                except ValueError:
+                    return 'Error: ID must be an integer'
                 name = request.form['name']
-                temp = request.form['temp']
-                humidity = request.form['humidity']
+                try:
+                    temp = float(request.form['temp'])
+                    humidity = float(request.form['humidity'])
+                except ValueError:
+                    return 'Error: Temp and Humidity must be a float'
 
                 conn = db_conn()
                 conn.execute('INSERT INTO users (id, name, temp, humidity) VALUES (?, ?, ?, ?)', \
